@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyB3ydz419KcuNRQxdBSTIHfbjgpSK-oOdU",
   authDomain: "esi-2d7b2.firebaseapp.com",
@@ -9,25 +9,26 @@ const firebaseConfig = {
   measurementId: "G-32610QEXWY"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// Sign Up Function
+// Sign up function (correct for v10+)
 function signup() {
   const email = document.getElementById("signup-email").value;
   const password = document.getElementById("signup-password").value;
 
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      alert("Sign up successful!");
-      window.location.href = "login.html"; // redirect to login page
+      alert("Sign Up successful!");
+      window.location.href = "login.html";
     })
     .catch((error) => {
       alert(error.message);
     });
 }
 
-// Login Function
+// Login function (correct for v10+)
 function login() {
   const email = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
@@ -35,41 +36,29 @@ function login() {
   auth.signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       alert("Login successful!");
-      window.location.href = "index.html"; // Redirect to home page
+      window.location.href = "index.html";
     })
     .catch((error) => {
       alert(error.message);
     });
 }
 
-// Check if user is logged in
+// Auth State Change
 auth.onAuthStateChanged((user) => {
   if (user) {
-    const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
-    if (loginBtn && logoutBtn) {
-      loginBtn.style.display = "none";
-      logoutBtn.style.display = "inline-block";
-    }
+    document.getElementById("login-btn")?.style.setProperty("display", "none");
+    document.getElementById("logout-btn")?.style.setProperty("display", "inline-block");
   } else {
-    const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
-    if (loginBtn && logoutBtn) {
-      loginBtn.style.display = "inline-block";
-      logoutBtn.style.display = "none";
-    }
+    document.getElementById("login-btn")?.style.setProperty("display", "inline-block");
+    document.getElementById("logout-btn")?.style.setProperty("display", "none");
   }
 });
 
-// Logout Function
-document.addEventListener("DOMContentLoaded", () => {
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-      auth.signOut().then(() => {
-        alert("Logged out successfully!");
-        window.location.href = "login.html"; // Redirect to login page
-      });
+// Logout function
+document.getElementById("logout-btn")?.addEventListener("click", () => {
+  auth.signOut()
+    .then(() => {
+      alert("Logged out successfully!");
+      window.location.href = "login.html";
     });
-  }
 });
